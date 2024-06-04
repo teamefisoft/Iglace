@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+   background:#FFFAFA;
+   font-family: "roboto", sans-serif;
+  /* font-family: "Poppins", "sans-serif"; */
+}
+.custom-header {
+  background-color: #f2f2f2;
+  color: blue;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.sidebar {
+  scrollbar-width: thin;
+  -ms-overflow-style: none;
+}
+
+.sidebar::-webkit-scrollbar {
+  display: none;
+}
+.custom-brown-button {
+  background-color: #8B5742;
+  color: #ffffff;
+}
+.hover-row:hover {
+  
+  cursor: pointer;
+  
+  
+ 
+}
