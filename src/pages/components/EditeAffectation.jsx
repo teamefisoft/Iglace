@@ -37,7 +37,7 @@ function EditeAffectationBtn({ open, onClose, agent, onSubmit }) {
     };
   
     return (
-      <Dialog open={open} onClose={onClose}>
+      <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
         <DialogTitle>Modifier le site</DialogTitle>
         <DialogContent>
           <TextField
@@ -46,10 +46,11 @@ function EditeAffectationBtn({ open, onClose, agent, onSubmit }) {
             value={selectedSaleSite}
             onChange={handleSaleSiteChange}
             fullWidth
+            margin="normal"
           >
             {siteVente?.map((site) => (
               <MenuItem key={site.ID} value={site.ID}>
-                {site.labele}
+                {site.name}
               </MenuItem>
             ))}
           </TextField>

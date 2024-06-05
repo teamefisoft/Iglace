@@ -34,7 +34,7 @@ const columns = [
 export default function Operation() {
   const dispatch = useDispatch();
   const operation = useSelector((state) => state.operation.operation);
-  //console.log("operator", operation);
+  
 
   useEffect(() => {
     dispatch(allOperation());

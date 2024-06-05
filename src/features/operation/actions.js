@@ -32,7 +32,6 @@ export const createOperator = createAsyncThunk(
           created_by_user_ID
         })) : []
       };
-      console.log(JSON.stringify(operationData));
 
       const response = await fetch('https://iglace.sysmanager.pro/api/v1/operation', {
         method: 'POST',
@@ -46,7 +45,7 @@ export const createOperator = createAsyncThunk(
         let errorData;
         try {
           errorData = await response.json();
-          console.log(errorData);
+         // console.log(errorData);
         } catch (error) {
           console.error('Erreur lors de l\'extraction des données d\'erreur JSON :', error);
           errorData = { message: 'Erreur inconnue lors de la création de l\'opération' };

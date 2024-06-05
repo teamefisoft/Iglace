@@ -33,9 +33,7 @@ function CreateOperatorBtn() {
   const capacity = useSelector((state) => state.capacity.capacity.data);
   const operation = useSelector((state) => state.operation.operator.data);
   const siteVente = useSelector((state) => state.siteVente.siteVente.data);
-
   const raison = useSelector((state) => state.operation.raison.data);
-
   const agentId = useSelector((state) => state.user.agent_ID);
   const userCreatedId = useSelector((state) => state.user.user_ID);
 
@@ -48,7 +46,6 @@ function CreateOperatorBtn() {
   const [total_quantity, setTotal_quantity] = useState();
   const [total_volume, setTotal_volume] = useState();
   const [ID_sale_site, setID_sale_site] = useState();
-  console.log("ID_sale_site", ID_sale_site);
   const [ID_operation_nature, setID_operation_nature] = useState();
   const [ID_operation_reason, setID_operation_reason] = useState();
   const [ID_unit_volume, setID_unit_volume] = useState(1);
@@ -133,7 +130,6 @@ function CreateOperatorBtn() {
       annex: annexs,
       stock: enStock,
     };
-    console.log("dispasth", orderData);
     try {
       dispatch(createOperator(orderData))
         .unwrap()
@@ -149,6 +145,7 @@ function CreateOperatorBtn() {
       toast.error(`${err}`);
     }
   };
+
 
   return (
     <div>
@@ -200,13 +197,15 @@ function CreateOperatorBtn() {
               onChange={(e) => setID_sale_site(parseInt(e.target.value))}
               fullWidth
             >
-              {siteVente.map((site) => (
+              {siteVente?.map((site) => 
+              (
                 <MenuItem key={site.ID} value={site.ID}>
-                {site.labele}
+                {site.name}
               </MenuItem>
-            ))}
-            console.log('sss',siteVente)
+            ))
+            }
             </TextField>
+            
           </div>
           <div className="mt-4">
             <TextField

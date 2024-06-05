@@ -99,20 +99,8 @@ export default function Affectation() {
                 <Tooltip arrow placement="left" title="Edit">
                   <IconButton onClick={() => handleEditClick(row.original)}>
                     <Edit />
-                  </IconButton>
-                  <div>
-                  <EditeAffectationBtn
-                  open={openEditPopup}
-                  onClose={() => setOpenEditPopup(false)}
-                  agent={selectedAgent}
-                  onSubmit={handleSubmit}
-                />
-                  </div>
-                
-                </Tooltip>
-               
-               
-                
+                  </IconButton> 
+                </Tooltip>     
               }
               {
                 <Tooltip arrow placement="right" title="Delete">
@@ -120,9 +108,7 @@ export default function Affectation() {
                     <Delete />
                   </IconButton>
                 </Tooltip>
-              }
-              
-                 
+              }       
               
             </Box>
            
@@ -138,6 +124,14 @@ export default function Affectation() {
           } /* 
           onRowSelectionChange={setRowSelection} */
         />
+         <div>
+      <EditeAffectationBtn
+        open={openEditPopup}
+        onClose={() => setOpenEditPopup(false)}
+        agent={selectedAgent}
+        onSubmit={handleSubmit}
+      />
+    </div>
       </div>
     </div>
   );
