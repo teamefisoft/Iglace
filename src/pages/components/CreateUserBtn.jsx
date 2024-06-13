@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef  } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { Button } from "@material-tailwind/react";
 import { Add, Visibility, VisibilityOff } from "@mui/icons-material";
@@ -32,9 +32,7 @@ import { getAllUsers } from "../../features/user/actions";
 function CreateUserBtn() {
   const dispatch = useDispatch();
 
-  const [isOpenCreate, { open: openCreate, close: closeCreate }] =
-    useDisclosure(false);
-
+  const [isOpenCreate, { open: openCreate, close: closeCreate }] = useDisclosure(false);
   const { provinces, villes, communes } = useSelector((state) => state.user);
 
   const [showPassword, setShowPassword] = useState(false);
@@ -51,8 +49,8 @@ function CreateUserBtn() {
   const [newLieuNaissance, setNewLieuNaissance] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [newGrade, setNewGrade] = useState("");
-  const [newborn_at, setNewBorn_at] = useState(Date);
-  const [newhired_at, setNewHired_at] = useState(Date);
+  const [newborn_at, setNewBorn_at] = useState(new Date());
+  const [newhired_at, setNewHired_at] = useState(new Date());
   const [ID_service, setID_service] = useState(1);
   const [ID_direction, setID_direction] = useState(1);
   const [ID_province, setID_province] = useState(1);
@@ -61,6 +59,9 @@ function CreateUserBtn() {
   const [pwd_confirm, setPwd_confirm] = useState("");
   const [availability, setAvailability] = useState(1);
   const [newfunction, setNewFunction] = useState("Chef de projet");
+  const [toastDisplayed, setToastDisplayed] = useState(false);
+
+  const toastId = useRef(null);
 
   const handleSubmitUser = async (event) => {
     event.preventDefault();
@@ -68,6 +69,12 @@ function CreateUserBtn() {
     if (!newUserPhone || !newUserPassword) {
       return;
     }
+
+    if (toastDisplayed) {
+      return; // Ne pas exécuter si un toast est déjà affiché
+    }
+
+    setToastDisplayed(true); // Marquer qu'un toast est affiché
 
     try {
       await dispatch(
@@ -97,10 +104,14 @@ function CreateUserBtn() {
       ).unwrap();
 
       closeCreate();
-      toast.success("utilisateur créée avec succès");
+      toast.success("Utilisateur créé avec succès", {
+        onClose: () => setToastDisplayed(false),
+      });
       dispatch(getAllUsers());
     } catch (err) {
-      toast.error(`${err}`);
+      toast.error(`${err}`, {
+        onClose: () => setToastDisplayed(false),
+      });
     }
   };
 
@@ -230,6 +241,7 @@ function CreateUserBtn() {
             onChange={(e) => setNewBorn_at(e.target.value)}
             fullWidth
           />
+           <div className="mb-4">
           <TextField
             margin="dense"
             id="hired_at"
@@ -239,6 +251,8 @@ function CreateUserBtn() {
             onChange={(e) => setNewHired_at(e.target.value)}
             fullWidth
           />
+          </div>
+          <div className="mb-4">
           <TextField
             select
             label="Province"
@@ -252,7 +266,8 @@ function CreateUserBtn() {
               </MenuItem>
             ))}
           </TextField>
-
+          </div>
+          <div className="mb-4">
           <TextField
             select
             label="Ville"
@@ -266,7 +281,9 @@ function CreateUserBtn() {
               </MenuItem>
             ))}
           </TextField>
+          </div>
 
+          <div className="mb-4">
           <TextField
             select
             label="Commune"
@@ -280,7 +297,7 @@ function CreateUserBtn() {
               </MenuItem>
             ))}
           </TextField>
-    
+            </div>
           <TextField
             margin="dense"
             id="pwd"

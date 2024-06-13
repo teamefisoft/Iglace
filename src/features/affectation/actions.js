@@ -29,14 +29,14 @@ export const putAffectation = createAsyncThunk(
     'update/assignment',
     async (payload, thunkAPI) => {
       const { ID_agent, ID_sale_site } = payload;
-  
+  console.log(payload);
       try {
         const newSaleSite = {
             ID_sale_site,
         };
   
         const response = await fetch(
-          `https://iglace.sysmanager.pro/api/v1/assignment/${ID_agent}`,
+          `https://iglace.sysmanager.pro/api/v1/dashboard/assignment/${ID_agent}`,
           {
             method: 'PUT',
             headers: {
@@ -48,11 +48,12 @@ export const putAffectation = createAsyncThunk(
   
         if (!response.ok) {
           const errorData = await response.json();
-          console.log(errorData)
+         // console.log(errorData)
           return thunkAPI.rejectWithValue(errorData.message);
         }
   
         const data = await response.json();
+        console.log(data);
         return data;
       } catch (error) {
         return thunkAPI.rejectWithValue(error.message);

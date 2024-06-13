@@ -4,7 +4,7 @@ import { MaterialReactTable } from "material-react-table";
 import { toast } from "react-toastify";
 import { Delete, Edit } from "@mui/icons-material";
 import { Box, CircularProgress, IconButton, Tooltip } from "@mui/material";
-
+import { useDisclosure } from "@mantine/hooks";
 import CreateAffectationBtn from "../components/CreateAffectation";
 import EditeAffectationBtn from "../components/EditeAffectation";
 import { useEffect, useState } from "react";
@@ -41,6 +41,10 @@ export default function Affectation() {
 
   const [openEditPopup, setOpenEditPopup] = useState(false);
   const [selectedAgent, setSelectedAgent] = useState(null);
+   const [isOpenCreate, { open: openCreate, close: closeCreate }] =
+    useDisclosure(false);
+  
+
 
   const handleEditClick = (agent) => {
     setSelectedAgent(agent);
@@ -53,15 +57,11 @@ export default function Affectation() {
       ID_sale_site: ID_sale_site,
     };
 
-
-
-
-
     dispatch(putAffectation(sale_site_new))
       .unwrap()
       .then(() => {
         closeCreate();
-        setLoading(false);
+      //  setLoading(false);
         toast.success("Lieu d'affectation modifier");
         dispatch(getAllAffectation());
       })

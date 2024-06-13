@@ -3,8 +3,11 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MaterialReactTable } from "material-react-table";
 import CreateUserBtn from "../components/CreateUserBtn";
-import { Box, CircularProgress, IconButton, Tooltip } from "@mui/material";
+import { Box, Button, CircularProgress, IconButton, Tooltip } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
+import EditeAffectationBtn from "../components/EditeAffectation";
+import { useDisclosure } from "@mantine/hooks";
+import { getAllAffectation,putAffectation } from "../../features/affectation/actions";
 
 import { toast } from "react-toastify";
 
@@ -28,7 +31,7 @@ const columns = [
     header: "Grade",
     enableClickToCopy: true,
     enableEditing: true,
-  },
+  }
  
 ];
 
@@ -36,13 +39,44 @@ const Users = () => {
   const dispatch = useDispatch();
 
   const [rowSelection, setRowSelection] = useState({});
-
   const { deletingUsers, users } = useSelector((state) => state.user);
+  const [openEditPopup, setOpenEditPopup] = useState(false);
+  const [selectedAgent, setSelectedAgent] = useState(null);
+  const [isOpenCreate, { open: openCreate, close: closeCreate }] =
+    useDisclosure(false);
 
   
   useEffect(() => {
     dispatch(getAllUsers());
   }, [dispatch]);
+
+  const handleEditClick = (agent) => {
+    setSelectedAgent(agent.ID);
+    setOpenEditPopup(true);
+    };
+    const handleSubmit = async (data,ID_sale_site) => {
+   
+    if (selectedAgent) {
+      const sale_site_new = {
+        ID_agent: selectedAgent,
+        ID_sale_site: ID_sale_site,
+      };
+   
+
+    dispatch(putAffectation(sale_site_new))
+      .unwrap()
+      .then(() => {
+        closeCreate();
+      //  setLoading(false);
+        toast.success("Lieu d'affectation modifier");
+        dispatch(getAllAffectation());
+      })
+      .catch((err) => {
+        toast.error(`${err}`);
+      }); }
+  };
+
+//console.log(users);
 
   const deleteUsers = () => {
     if (users.length <= 1) {
@@ -60,22 +94,6 @@ const Users = () => {
     dispatch(deleteManyUsers({ emails: [row.original.email] }));
   };
 
-  // const handleSaveRowEdits = async ({ exitEditingMode, row, values }) => {
-  //   const oldRow = row.original;
-  //   const newRow = values;
-  //   for (let key of Object.keys(newRow)) {
-  //     if (oldRow[key] == newRow[key]) continue;
-  //     if (!Boolean(oldRow[key]) && !Boolean(newRow[key])) continue;
-  //     const { _id: id } = oldRow;
-  //     try {
-  //       let value = newRow[key];
-  //       await dispatch(updateUsers({ key, value, id })).unwrap();
-  //     } catch (error) {
-  //       toast.error(`${error}`);
-  //     }
-  //   }
-  //   exitEditingMode();
-  // };
 
   return (
     <div className="ml-[2rem] mr-[2rem]">
@@ -96,6 +114,7 @@ const Users = () => {
      //   onEditingRowSave={handleSaveRowEdits}
         getRowId={(row) => row?._id}
         renderRowActions={({ row, table }) => (
+          
           <Box sx={{ display: "flex", gap: "1rem" }}>
             {
               <Tooltip arrow placement="left" title="Edit">
@@ -105,12 +124,26 @@ const Users = () => {
               </Tooltip>
             }
             {
-              <Tooltip arrow placement="right" title="Delete">
+              <Tooltip arrow placement="top" title="Delete">
                 <IconButton color="error">
                   <Delete />
                 </IconButton>
               </Tooltip>
             }
+              {
+              <Tooltip arrow placement="right" title="Affecter">
+               <Button 
+                onClick={() => handleEditClick(row.original)}
+              
+                style={{
+                  backgroundColor: "#8B5742",
+                  color: "#ffffff",
+                  textTransform: "capitalize",
+                }}>
+                Affecter
+               </Button>
+              </Tooltip>
+            } 
           </Box>
         )}
         state={{
@@ -119,6 +152,14 @@ const Users = () => {
         }}
         onRowSelectionChange={setRowSelection}
       />
+       <div>
+      <EditeAffectationBtn
+        open={openEditPopup}
+        onClose={() => setOpenEditPopup(false)}
+        agent={selectedAgent}
+        onSubmit={handleSubmit}
+      />
+    </div>
     </div>
   );
 };

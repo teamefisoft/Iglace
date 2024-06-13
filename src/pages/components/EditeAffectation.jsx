@@ -17,6 +17,7 @@ function EditeAffectationBtn({ open, onClose, agent, onSubmit }) {
     const dispatch = useDispatch();
     const siteVente = useSelector((state) => state.siteVente.siteVente.data);
     const [selectedSaleSite, setSelectedSaleSite] = useState(agent ? agent.ID_sale_site : '');
+
   
     useEffect(() => {
       if (agent) {
@@ -33,7 +34,8 @@ function EditeAffectationBtn({ open, onClose, agent, onSubmit }) {
     };
   
     const handleSubmit = () => {
-      onSubmit(agent._id, selectedSaleSite);
+      onSubmit(agent.ID_agent, selectedSaleSite);
+      onClose(onClose)
     };
   
     return (
@@ -47,6 +49,17 @@ function EditeAffectationBtn({ open, onClose, agent, onSubmit }) {
             onChange={handleSaleSiteChange}
             fullWidth
             margin="normal"
+            MenuProps={{
+              anchorOrigin: {
+                vertical: "bottom",
+                horizontal: "left"
+              },
+              transformOrigin: {
+                vertical: "top",
+                horizontal: "left"
+              },
+              getContentAnchorEl: null,
+            }}
           >
             {siteVente?.map((site) => (
               <MenuItem key={site.ID} value={site.ID}>
